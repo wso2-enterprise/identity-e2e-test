@@ -1,0 +1,240 @@
+name: WSO2 IS E2E API Test Suite
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      method:
+        description: "Choose how to start WSO2 Identity Server"
+        required: true
+        default: "maven"
+        type: choice
+        options:
+          - maven
+          - docker
+
+jobs:
+  test-wso2:
+    runs-on: ubuntu-latest
+    
+    env:
+      DEPLOY_METHOD: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.method || 'maven' }}
+      JAVA_TOOL_OPTIONS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -Djdk.nio.zipfs.allowDotZipEntry=true"
+      MAVEN_OPTS: -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.class=standard -Dmaven.wagon.http.retryHandler.count=3
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Adopt JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: "11"
+          distribution: "adopt"
+
+      # Start WSO2 IS container
+      - name: Start WSO2 IS by Docker-image
+        if: env.DEPLOY_METHOD == 'docker'
+        run: |
+          LATEST_VERSION=$(curl -s "https://hub.docker.com/v2/repositories/wso2/wso2is/tags/" | jq -r '.results[].name' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -Vr | head -1)
+          if [[ -z "$LATEST_VERSION" ]]; then
+            echo "Failed to fetch the latest version!"
+            exit 1
+          fi
+          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+          echo "Latest version: $LATEST_VERSION"
+
+          docker run -d \
+          --name wso2is \
+          -p 9443:9443 \
+          wso2/wso2is:$LATEST_VERSION
+      
+      # Clone, Build and Start WSO2 IS
+      - name: Clone, Build and Start WSO2 IS
+        id: build-is
+        if: env.DEPLOY_METHOD == 'maven'
+        run: |
+          set -e  # Exit on error
+    
+          echo "Cloning WSO2 IS repository..."
+          git clone https://github.com/wso2/product-is.git
+          cd product-is
+    
+          echo "Building WSO2 IS..."
+          mvn clean install -Dmaven.test.skip=true -Dspotbugs.skip=true -Dfindbugs.skip=true -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true | tee mvn-build.log
+    
+          echo "Extracting and starting WSO2 IS..."
+          cd modules/distribution/target
+
+          # The zip file is directly in the target directory
+          zip_file=$(find . -name 'wso2is-*.zip' -type f -not -name 'wso2is-*-src.zip' -print -quit)
+          dir_name=$(basename "$zip_file" .zip)
+          echo "DIR_NAME=${dir_name}" >> $GITHUB_OUTPUT
+
+          if [ ! -f "$zip_file" ]; then
+            echo "Error: Zip file not found at expected location"
+            echo "Current directory: $(pwd)"
+            ls -la
+            exit 1
+          fi
+
+          echo "Unzipping $zip_file..."
+          unzip "$zip_file"
+          cd "$dir_name/bin/"
+          chmod +x wso2server.sh
+          ./wso2server.sh start
+
+      # Health check for WSO2 IS
+      - name: Wait for WSO2 IS to be ready
+        run: |
+          max_retries=30
+          counter=0
+          echo "Waiting for WSO2 IS to be ready..."
+          until curl -k https://localhost:9443/carbon || [ $counter -eq $max_retries ]
+          do
+            counter=$((counter+1))
+            echo "Attempt $counter/$max_retries - Waiting for WSO2 IS to start..."
+            sleep 10
+          done
+          
+          if [ $counter -eq $max_retries ]; then
+            echo "WSO2 IS failed to start within the expected time"
+            exit 1
+          fi
+          
+          echo "WSO2 IS is ready!"
+
+      # Install newman
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
+
+      # Create results directory
+      - name: Prepare results directory
+        run: |
+          rm -rf results
+          mkdir -p results
+
+      # Make script excutable
+      - name: Make script executable
+        run: chmod +x scripts/create_and_assign_api_resources.sh
+
+      # Run the script
+      - name: Run Test Script
+        run: ./scripts/create_and_assign_api_resources.sh  
+
+      # Run first Postman collection
+      - name: Run Collection 01
+        id: newman1
+        run: |
+          set +e  # Don't exit on error
+          newman run ./Postman/collection01.json \
+            --insecure \
+            --reporters cli,htmlextra,junit \
+            --reporter-htmlextra-export results/htmlreport1.html \
+            --reporter-junit-export results/junit-report1.xml
+          echo "exit_code1=$?" >> $GITHUB_OUTPUT
+          if [ $? -ne 0 ]; then
+            echo "::warning:: Some tests in Collection 01 failed!"
+          fi
+        continue-on-error: true
+
+      # Run second Postman collection
+      - name: Run Collection 02
+        id: newman2
+        run: |
+          set +e  # Don't exit on error
+          newman run ./Postman/collection02.json \
+            --insecure \
+            --reporters cli,htmlextra,junit \
+            --reporter-htmlextra-export results/htmlreport2.html \
+            --reporter-junit-export results/junit-report2.xml
+          echo "exit_code2=$?" >> $GITHUB_OUTPUT
+          if [ $? -ne 0 ]; then
+            echo "::warning:: Some tests in Collection 02 failed!"
+          fi
+        continue-on-error: true
+
+      # Upload test results
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: results/*
+          retention-days: 30
+
+      # Detailed test results summary
+      - name: Test Results Summary
+        if: always()
+        run: |
+          echo "=== Test Results Summary ==="
+          
+          # Collection 01 Results
+          echo -e "\n Collection 01 Results:"
+          if [ -f results/junit-report1.xml ]; then
+          total_tests1=$(grep -oP 'tests="\K[0-9]+' results/junit-report1.xml | head -n1)
+          failures1=$(grep -oP 'failures="\K[0-9]+' results/junit-report1.xml | head -n1)
+          errors1=$(grep -oP 'errors="\K[0-9]+' results/junit-report1.xml | head -n1)
+
+          total_tests1=${total_tests1:-0}
+          failures1=${failures1:-0}
+          errors1=${errors1:-0}
+            
+            echo "Total tests: $total_tests1"
+            echo "Failed tests: $failures1"
+            echo "Errors: $errors1"
+            
+            if [ "$failures1" -gt 0 ] || [ "$errors1" -gt 0 ]; then
+              echo -e "\n Failed Test Details (Collection 01):"
+              grep -A 2 "<failure" results/junit-report1.xml || true
+            fi
+          else
+            echo "Test result file for Collection 01 not found!"
+          fi
+          
+          # Collection 02 Results
+          echo -e "\n Collection 02 Results:"
+          if [ -f results/junit-report2.xml ]; then
+          total_tests2=$(grep -oP 'tests="\K[0-9]+' results/junit-report1.xml | head -n1)
+          failures2=$(grep -oP 'failures="\K[0-9]+' results/junit-report1.xml | head -n1)
+          errors2=$(grep -oP 'errors="\K[0-9]+' results/junit-report1.xml | head -n1)
+
+          total_tests2=${total_tests2:-0}
+          failures2=${failures2:-0}
+          errors2=${errors2:-0}
+            
+            echo "Total tests: $total_tests2"
+            echo "Failed tests: $failures2"
+            echo "Errors: $errors2"
+            
+            if [ "$failures2" -gt 0 ] || [ "$errors2" -gt 0 ]; then
+              echo -e "\n Failed Test Details (Collection 02):"
+              grep -A 2 "<failure" results/junit-report2.xml || true
+            fi
+          else
+            echo "Test result file for Collection 02 not found!"
+          fi
+          
+          # Overall Status
+          if [ -f results/junit-report1.xml ] && [ -f results/junit-report2.xml ]; then
+            total_failures=$((failures1 + failures2))
+            total_errors=$((errors1 + errors2))
+            
+            echo -e "\n=== Overall Summary ==="
+            echo "Total Tests: $((total_tests1 + total_tests2))"
+            echo "Total Failures: $total_failures"
+            echo "Total Errors: $total_errors"
+            
+            if [ "$total_failures" -gt 0 ] || [ "$total_errors" -gt 0 ]; then
+              echo -e "\n Some tests failed - check the uploaded artifacts for detailed reports"
+              exit 1
+            else
+              echo -e "\n All tests passed successfully!"
+            fi
+          else
+            echo -e "\n Some test result files are missing!"
+            exit 1
+          fi
