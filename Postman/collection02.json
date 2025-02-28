@@ -1,10 +1,7 @@
 {
 	"info": {
-		"_postman_id": "272d7bd2-6d58-425b-9c2f-d0e5b4ad87c7",
 		"name": "Organization APIs",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38862978",
-		"_collection_link": "https://api000-4118.postman.co/workspace/API-Workspace~fb425487-c9ee-48d4-b643-e32394a24207/collection/38862978-272d7bd2-6d58-425b-9c2f-d0e5b4ad87c7?action=share&source=collection_link&creator=38862978"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
