@@ -17,7 +17,7 @@ on:
           - docker
           - existing-setup
       server_url:
-        description: "URL of existing WSO2 Identity Server (only used when method is 'existing-setup')"
+        description: "URL of existing WSO2 Identity Server (If applicable). Make sure to not include the protocol (http/https)."
         required: false
         type: string
 
@@ -154,10 +154,10 @@ jobs:
       # Update Server URL in Postman Collections
       - name: Update Server URL in Postman Collections
         run: |
-          echo "Updating WSO2 server URL in Postman collections
+          echo "Updating WSO2 server URL in Postman collections"
           sed -i.bak "s|<WSO2_SERVER_URL>|${WSO2_SERVER_URL}|g" ./Postman/collection01.json
           sed -i.bak "s|<WSO2_SERVER_URL>|${WSO2_SERVER_URL}|g" ./Postman/collection02.json
-          echo "Updated WSO2 server URL in Postman collections
+          echo "Updated WSO2 server URL in Postman collections"
 
       # Run first Postman collection
       - name: Run Collection 01
@@ -239,9 +239,9 @@ jobs:
           # Collection 02 Results
           echo -e "\n Collection 02 Results:"
           if [ -f results/junit-report2.xml ]; then
-          total_tests2=$(grep -oP 'tests="\K[0-9]+' results/junit-report1.xml | head -n1)
-          failures2=$(grep -oP 'failures="\K[0-9]+' results/junit-report1.xml | head -n1)
-          errors2=$(grep -oP 'errors="\K[0-9]+' results/junit-report1.xml | head -n1)
+          total_tests2=$(grep -oP 'tests="\K[0-9]+' results/junit-report2.xml | head -n1)
+          failures2=$(grep -oP 'failures="\K[0-9]+' results/junit-report2.xml | head -n1)
+          errors2=$(grep -oP 'errors="\K[0-9]+' results/junit-report2.xml | head -n1)
 
           total_tests2=${total_tests2:-0}
           failures2=${failures2:-0}

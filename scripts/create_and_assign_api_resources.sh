@@ -101,7 +101,7 @@ fetch_api_resources() {
     echo "$response" | jq -c '.apiResources[]' | while read -r resource; do
         resource_id=$(echo "$resource" | jq -r '.id')
         resource_self=$(echo "$resource" | jq -r '.self')
-        scope_url="https://wso2isnew.westus2.cloudapp.azure.com$resource_self"
+        scope_url="https://${SERVER_URL}$resource_self"
         
         # Check if the resource_id is valid
         if [[ "$resource_id" != "null" && "$resource_id" != "" ]]; then
