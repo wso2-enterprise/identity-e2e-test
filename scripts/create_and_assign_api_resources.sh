@@ -1,10 +1,17 @@
 #!/bin/bash
 
+# Check if server URL is provided as an environment variable
+SERVER_URL=${SERVER_URL:-"localhost:9443"}
+
+# Remove trailing slash if present
+SERVER_URL=${SERVER_URL%/}
+echo "Using WSO2 Identity Server at: ${SERVER_URL}"
+
 # Base URLs
-BASE_URL_API_RESOURCES='https://localhost:9443/t/carbon.super/api/server/v1/api-resources'
-BASE_URL_CREATE_APP='https://localhost:9443/t/carbon.super/api/server/v1/applications'
-BASE_URL_GET_APP_ID='https://localhost:9443/t/carbon.super/api/server/v1/applications?filter=name+eq+E2E-Test-Suite-Token'
-BASE_URL_ASSIGN_APIS='https://localhost:9443/t/carbon.super/api/server/v1/applications/%s/authorized-apis'  # Placeholder for app ID
+BASE_URL_API_RESOURCES="https://${SERVER_URL}/t/carbon.super/api/server/v1/api-resources"
+BASE_URL_CREATE_APP="https://${SERVER_URL}/t/carbon.super/api/server/v1/applications"
+BASE_URL_GET_APP_ID="https://${SERVER_URL}/t/carbon.super/api/server/v1/applications?filter=name+eq+E2E-Test-Suite-Token"
+BASE_URL_ASSIGN_APIS="https://${SERVER_URL}/t/carbon.super/api/server/v1/applications/%s/authorized-apis"  # Placeholder for app ID
 
 # Admin credentials
 USERNAME='admin'
@@ -94,7 +101,7 @@ fetch_api_resources() {
     echo "$response" | jq -c '.apiResources[]' | while read -r resource; do
         resource_id=$(echo "$resource" | jq -r '.id')
         resource_self=$(echo "$resource" | jq -r '.self')
-        scope_url="https://localhost:9443$resource_self"
+        scope_url="https://wso2isnew.westus2.cloudapp.azure.com$resource_self"
         
         # Check if the resource_id is valid
         if [[ "$resource_id" != "null" && "$resource_id" != "" ]]; then

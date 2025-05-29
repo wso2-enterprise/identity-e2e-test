@@ -14572,7 +14572,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"google\",\n    \"description\": \"IdP for Google Federation\",\n    \"image\": \"https://localhost:9443/console/resources/connections/assets/images/logos/google.svg\",\n    \"isPrimary\": false,\n    \"isFederationHub\": false,\n    \"homeRealmIdentifier\": \"localhost\",\n    \"certificate\": {\n        \"certificates\": [],\n        \"jwksUri\": \"https://localhost:9444/oauth2/jwks\"\n    },\n    \"alias\": \"https://localhost:9444/oauth2/token\",\n    \"claims\": {\n        \"userIdClaim\": {\n            \"uri\": \"http://wso2.org/claims/username\"\n        },\n        \"roleClaim\": {\n            \"uri\": \"http://wso2.org/claims/username\"\n        },\n        \"mappings\": [\n            {\n                \"idpClaim\": \"country\",\n                \"localClaim\": {\n                    \"uri\": \"http://wso2.org/claims/username\"\n                }\n            }\n        ],\n        \"provisioningClaims\": [\n            {\n                \"claim\": {\n                    \"uri\": \"http://wso2.org/claims/username\"\n                },\n                \"defaultValue\": \"sathya\"\n            }\n        ]\n    },\n    \"roles\": {\n        \"mappings\": [\n            {\n                \"idpRole\": \"google-manager\",\n                \"localRole\": \"manager\"\n            }\n        ],\n        \"outboundProvisioningRoles\": [\n            \"admin\"\n        ]\n    },\n    \"federatedAuthenticators\": {\n        \"defaultAuthenticatorId\": \"VHdpdHRlckF1dGhlbnRpY2F0b3I\",\n        \"authenticators\": [\n            {\n                \"authenticatorId\": \"VHdpdHRlckF1dGhlbnRpY2F0b3I\",\n                \"isEnabled\": true,\n                \"isDefault\": false,\n                \"properties\": [\n                    {\n                        \"key\": \"somePropertyKey\",\n                        \"value\": \"somePropertyValue\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"provisioning\": {\n        \"jit\": {\n            \"isEnabled\": true,\n            \"scheme\": \"PROVISION_SILENTLY\",\n            \"userstore\": \"PRIMARY\",\n            \"associateLocalUser\": true,\n            \"attributeSyncMethod\": \"OVERRIDE_ALL\"\n        },\n        \"outboundConnectors\": {\n            \"defaultConnectorId\": \"U0NJTTI\",\n            \"connectors\": [\n                {\n                    \"connectorId\": \"U0NJTTI\",\n                    \"isEnabled\": true,\n                    \"isDefault\": false,\n                    \"blockingEnabled\": false,\n                    \"rulesEnabled\": false,\n                    \"properties\": [\n                        {\n                            \"key\": \"somePropertyKey\",\n                            \"value\": \"somePropertyValue\"\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}",
+									"raw": "{\n    \"name\": \"google\",\n    \"description\": \"IdP for Google Federation\",\n    \"image\": \"https://<WSO2_SERVER_URL>/console/resources/connections/assets/images/logos/google.svg\",\n    \"isPrimary\": false,\n    \"isFederationHub\": false,\n    \"homeRealmIdentifier\": \"localhost\",\n    \"certificate\": {\n        \"certificates\": [],\n        \"jwksUri\": \"https://localhost:9444/oauth2/jwks\"\n    },\n    \"alias\": \"https://localhost:9444/oauth2/token\",\n    \"claims\": {\n        \"userIdClaim\": {\n            \"uri\": \"http://wso2.org/claims/username\"\n        },\n        \"roleClaim\": {\n            \"uri\": \"http://wso2.org/claims/username\"\n        },\n        \"mappings\": [\n            {\n                \"idpClaim\": \"country\",\n                \"localClaim\": {\n                    \"uri\": \"http://wso2.org/claims/username\"\n                }\n            }\n        ],\n        \"provisioningClaims\": [\n            {\n                \"claim\": {\n                    \"uri\": \"http://wso2.org/claims/username\"\n                },\n                \"defaultValue\": \"sathya\"\n            }\n        ]\n    },\n    \"roles\": {\n        \"mappings\": [\n            {\n                \"idpRole\": \"google-manager\",\n                \"localRole\": \"manager\"\n            }\n        ],\n        \"outboundProvisioningRoles\": [\n            \"admin\"\n        ]\n    },\n    \"federatedAuthenticators\": {\n        \"defaultAuthenticatorId\": \"VHdpdHRlckF1dGhlbnRpY2F0b3I\",\n        \"authenticators\": [\n            {\n                \"authenticatorId\": \"VHdpdHRlckF1dGhlbnRpY2F0b3I\",\n                \"isEnabled\": true,\n                \"isDefault\": false,\n                \"properties\": [\n                    {\n                        \"key\": \"somePropertyKey\",\n                        \"value\": \"somePropertyValue\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"provisioning\": {\n        \"jit\": {\n            \"isEnabled\": true,\n            \"scheme\": \"PROVISION_SILENTLY\",\n            \"userstore\": \"PRIMARY\",\n            \"associateLocalUser\": true,\n            \"attributeSyncMethod\": \"OVERRIDE_ALL\"\n        },\n        \"outboundConnectors\": {\n            \"defaultConnectorId\": \"U0NJTTI\",\n            \"connectors\": [\n                {\n                    \"connectorId\": \"U0NJTTI\",\n                    \"isEnabled\": true,\n                    \"isDefault\": false,\n                    \"blockingEnabled\": false,\n                    \"rulesEnabled\": false,\n                    \"properties\": [\n                        {\n                            \"key\": \"somePropertyKey\",\n                            \"value\": \"somePropertyValue\"\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -28937,7 +28937,7 @@
 							}
 						],
 						"url": {
-							"raw": "https://localhost:9443/api/server/v1/applications/{{application_saml_id}}",
+							"raw": "https://<WSO2_SERVER_URL>/api/server/v1/applications/{{application_saml_id}}",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -29585,7 +29585,7 @@
 		},
 		{
 			"key": "serverUrl",
-			"value": "localhost:9443",
+			"value": "<WSO2_SERVER_URL>",
 			"type": "string"
 		},
 		{
@@ -29616,7 +29616,7 @@
 		},
 		{
 			"key": "token_url",
-			"value": "https://localhost:9443/t/carbon.super/oauth2/token",
+			"value": "https://<WSO2_SERVER_URL>/t/carbon.super/oauth2/token",
 			"type": "string"
 		},
 		{
