@@ -15,6 +15,11 @@ on:
         options:
           - maven
           - docker
+          - existing-setup
+      server_url:
+        description: "URL of existing WSO2 Identity Server (If applicable). Make sure to not include the protocol (http/https)."
+        required: false
+        type: string
 
 jobs:
   test-wso2:
@@ -22,6 +27,7 @@ jobs:
     
     env:
       DEPLOY_METHOD: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.method || 'maven' }}
+      WSO2_SERVER_URL: ${{ github.event.inputs.method == 'existing-setup' && github.event.inputs.server_url || 'localhost:9443' }}
       JAVA_TOOL_OPTIONS: "-Djdk.util.zip.disableZip64ExtraFieldValidation=true -Djdk.nio.zipfs.allowDotZipEntry=true"
       MAVEN_OPTS: -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.class=standard -Dmaven.wagon.http.retryHandler.count=3
 
@@ -30,6 +36,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Adopt JDK 11
+        if: env.DEPLOY_METHOD != 'existing-setup'
         uses: actions/setup-java@v4
         with:
           java-version: "11"
@@ -87,8 +94,27 @@ jobs:
           chmod +x wso2server.sh
           ./wso2server.sh start
 
+      # Validate connection to existing WSO2 IS
+      - name: Validate existing WSO2 IS connection
+        if: env.DEPLOY_METHOD == 'existing-setup'
+        run: |
+          echo "Using existing WSO2 IS at https://$WSO2_SERVER_URL"
+          echo "Validating URL format."
+
+          echo "Validating connection to existing WSO2 IS at https://$WSO2_SERVER_URL."
+          
+          # Basic connection test
+          if ! curl -k -s -o /dev/null -w "%{http_code}" "https://$WSO2_SERVER_URL" | grep -q -E "2[0-9][0-9]|3[0-9][0-9]"; then
+            echo "::error::Failed to connect to the provided WSO2 IS URL: https://$WSO2_SERVER_URL"
+            echo "Please make sure the server is running and accessible."
+            exit 1
+          fi
+          
+          echo "Successfully connected to existing WSO2 IS."
+
       # Health check for WSO2 IS
       - name: Wait for WSO2 IS to be ready
+        if: env.DEPLOY_METHOD != 'existing-setup'
         run: |
           max_retries=30
           counter=0
@@ -123,15 +149,25 @@ jobs:
 
       # Run the script
       - name: Run Test Script
-        run: ./scripts/create_and_assign_api_resources.sh  
+        run: SERVER_URL="${WSO2_SERVER_URL}" ./scripts/create_and_assign_api_resources.sh
+
+      # Update Server URL in Postman Collections
+      - name: Update Server URL in Postman Collections
+        run: |
+          echo "Updating WSO2 server URL in Postman collections"
+          sed -i.bak "s|<WSO2_SERVER_URL>|${WSO2_SERVER_URL}|g" ./Postman/collection01.json
+          sed -i.bak "s|<WSO2_SERVER_URL>|${WSO2_SERVER_URL}|g" ./Postman/collection02.json
+          echo "Updated WSO2 server URL in Postman collections"
 
       # Run first Postman collection
       - name: Run Collection 01
         id: newman1
         run: |
           set +e  # Don't exit on error
+
           newman run ./Postman/collection01.json \
             --insecure \
+            --env-var "serverUrl=${WSO2_SERVER_URL}" \
             --reporters cli,htmlextra,junit \
             --reporter-htmlextra-export results/htmlreport1.html \
             --reporter-junit-export results/junit-report1.xml
@@ -146,8 +182,10 @@ jobs:
         id: newman2
         run: |
           set +e  # Don't exit on error
+
           newman run ./Postman/collection02.json \
             --insecure \
+            --env-var "serverUrl=${WSO2_SERVER_URL}" \
             --reporters cli,htmlextra,junit \
             --reporter-htmlextra-export results/htmlreport2.html \
             --reporter-junit-export results/junit-report2.xml
@@ -155,6 +193,9 @@ jobs:
           if [ $? -ne 0 ]; then
             echo "::warning:: Some tests in Collection 02 failed!"
           fi
+          
+          # Restore the original collection file
+          mv ./Postman/collection02.json.bak ./Postman/collection02.json
         continue-on-error: true
 
       # Upload test results
@@ -198,9 +239,9 @@ jobs:
           # Collection 02 Results
           echo -e "\n Collection 02 Results:"
           if [ -f results/junit-report2.xml ]; then
-          total_tests2=$(grep -oP 'tests="\K[0-9]+' results/junit-report1.xml | head -n1)
-          failures2=$(grep -oP 'failures="\K[0-9]+' results/junit-report1.xml | head -n1)
-          errors2=$(grep -oP 'errors="\K[0-9]+' results/junit-report1.xml | head -n1)
+          total_tests2=$(grep -oP 'tests="\K[0-9]+' results/junit-report2.xml | head -n1)
+          failures2=$(grep -oP 'failures="\K[0-9]+' results/junit-report2.xml | head -n1)
+          errors2=$(grep -oP 'errors="\K[0-9]+' results/junit-report2.xml | head -n1)
 
           total_tests2=${total_tests2:-0}
           failures2=${failures2:-0}

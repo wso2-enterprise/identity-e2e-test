@@ -317,7 +317,7 @@
 									},
 									{
 										"key": "Access-Control-Allow-Origin",
-										"value": "https://localhost:9443/t/carbon.super/console"
+										"value": "https://<WSO2_SERVER_URL>/t/carbon.super/console"
 									},
 									{
 										"key": "Referer",
@@ -419,7 +419,7 @@
 									},
 									{
 										"key": "Access-Control-Allow-Origin",
-										"value": "https://localhost:9443/t/carbon.super/console"
+										"value": "https://<WSO2_SERVER_URL>/t/carbon.super/console"
 									},
 									{
 										"key": "Referer",
@@ -550,7 +550,7 @@
 									},
 									{
 										"key": "Access-Control-Allow-Origin",
-										"value": "https://localhost:9443/t/carbon.super/console"
+										"value": "https://<WSO2_SERVER_URL>/t/carbon.super/console"
 									},
 									{
 										"key": "Referer",
@@ -1159,7 +1159,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"image\": \"assets/images/logos/enterprise.svg\",\r\n    \"isPrimary\": false,\r\n    \"roles\": {\r\n        \"mappings\": [],\r\n        \"outboundProvisioningRoles\": []\r\n    },\r\n    \"certificate\": {\r\n        \"jwksUri\": \"\",\r\n        \"certificates\": [\r\n            \"\"\r\n        ]\r\n    },\r\n    \"claims\": {\r\n        \"userIdClaim\": {\r\n            \"uri\": \"\"\r\n        },\r\n        \"provisioningClaims\": [],\r\n        \"roleClaim\": {\r\n            \"uri\": \"\"\r\n        }\r\n    },\r\n    \"name\": \"Enterprise IDP\",\r\n    \"alias\": \"\",\r\n    \"description\": \"Authenticate users with Enterprise OIDC connections.\",\r\n    \"federatedAuthenticators\": {\r\n        \"defaultAuthenticatorId\": \"T3BlbklEQ29ubmVjdEF1dGhlbnRpY2F0b3I\",\r\n        \"authenticators\": [\r\n            {\r\n                \"isEnabled\": true,\r\n                \"authenticatorId\": \"T3BlbklEQ29ubmVjdEF1dGhlbnRpY2F0b3I\",\r\n                \"properties\": [\r\n                    {\r\n                        \"key\": \"ClientId\",\r\n                        \"value\": \"jhkljdfle\"\r\n                    },\r\n                    {\r\n                        \"key\": \"ClientSecret\",\r\n                        \"value\": \"jkfjlfk;-djdhfwjflj\"\r\n                    },\r\n                    {\r\n                        \"key\": \"OAuth2AuthzEPUrl\",\r\n                        \"value\": \"https://myapp.io\"\r\n                    },\r\n                    {\r\n                        \"key\": \"OAuth2TokenEPUrl\",\r\n                        \"value\": \"https://gsieidheo.com\"\r\n                    },\r\n                    {\r\n                        \"key\": \"callbackUrl\",\r\n                        \"value\": \"https://localhost:9443/o/c5b91305-43d9-4832-ab68-e4e2d1536f4f/commonauth\"\r\n                    }\r\n                ]\r\n            }\r\n        ]\r\n    },\r\n    \"homeRealmIdentifier\": \"\",\r\n    \"isFederationHub\": false,\r\n    \"idpIssuerName\": \"\",\r\n    \"templateId\": \"enterprise-oidc-idp\"\r\n}",
+									"raw": "{\r\n    \"image\": \"assets/images/logos/enterprise.svg\",\r\n    \"isPrimary\": false,\r\n    \"roles\": {\r\n        \"mappings\": [],\r\n        \"outboundProvisioningRoles\": []\r\n    },\r\n    \"certificate\": {\r\n        \"jwksUri\": \"\",\r\n        \"certificates\": [\r\n            \"\"\r\n        ]\r\n    },\r\n    \"claims\": {\r\n        \"userIdClaim\": {\r\n            \"uri\": \"\"\r\n        },\r\n        \"provisioningClaims\": [],\r\n        \"roleClaim\": {\r\n            \"uri\": \"\"\r\n        }\r\n    },\r\n    \"name\": \"Enterprise IDP\",\r\n    \"alias\": \"\",\r\n    \"description\": \"Authenticate users with Enterprise OIDC connections.\",\r\n    \"federatedAuthenticators\": {\r\n        \"defaultAuthenticatorId\": \"T3BlbklEQ29ubmVjdEF1dGhlbnRpY2F0b3I\",\r\n        \"authenticators\": [\r\n            {\r\n                \"isEnabled\": true,\r\n                \"authenticatorId\": \"T3BlbklEQ29ubmVjdEF1dGhlbnRpY2F0b3I\",\r\n                \"properties\": [\r\n                    {\r\n                        \"key\": \"ClientId\",\r\n                        \"value\": \"jhkljdfle\"\r\n                    },\r\n                    {\r\n                        \"key\": \"ClientSecret\",\r\n                        \"value\": \"jkfjlfk;-djdhfwjflj\"\r\n                    },\r\n                    {\r\n                        \"key\": \"OAuth2AuthzEPUrl\",\r\n                        \"value\": \"https://myapp.io\"\r\n                    },\r\n                    {\r\n                        \"key\": \"OAuth2TokenEPUrl\",\r\n                        \"value\": \"https://gsieidheo.com\"\r\n                    },\r\n                    {\r\n                        \"key\": \"callbackUrl\",\r\n                        \"value\": \"https://<WSO2_SERVER_URL>/o/c5b91305-43d9-4832-ab68-e4e2d1536f4f/commonauth\"\r\n                    }\r\n                ]\r\n            }\r\n        ]\r\n    },\r\n    \"homeRealmIdentifier\": \"\",\r\n    \"isFederationHub\": false,\r\n    \"idpIssuerName\": \"\",\r\n    \"templateId\": \"enterprise-oidc-idp\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1167,12 +1167,11 @@
 									}
 								},
 								"url": {
-									"raw": "https://localhost:9443/t/carbon.super/o/api/server/v1/identity-providers",
+									"raw": "https://{{serverUrl}}/t/carbon.super/o/api/server/v1/identity-providers",
 									"protocol": "https",
 									"host": [
-										"localhost"
+										"{{serverUrl}}"
 									],
-									"port": "9443",
 									"path": [
 										"t",
 										"carbon.super",
@@ -1338,7 +1337,7 @@
 									},
 									{
 										"key": "Access-Control-Allow-Origin",
-										"value": "https://localhost:9443/t/carbon.super/o/c5b91305-43d9-4832-ab68-e4e2d1536f4f/console"
+										"value": "https://<WSO2_SERVER_URL>/t/carbon.super/o/c5b91305-43d9-4832-ab68-e4e2d1536f4f/console"
 									},
 									{
 										"key": "Referer",
@@ -1367,12 +1366,11 @@
 									}
 								},
 								"url": {
-									"raw": "https://localhost:9443/t/carbon.super/o/api/server/v1/applications/{{shared_application_id}}",
+									"raw": "https://{{serverUrl}}/t/carbon.super/o/api/server/v1/applications/{{shared_application_id}}",
 									"protocol": "https",
 									"host": [
-										"localhost"
+										"{{serverUrl}}"
 									],
-									"port": "9443",
 									"path": [
 										"t",
 										"carbon.super",
@@ -5577,7 +5575,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"google\",\n    \"description\": \"IdP for Google Federation\",\n    \"image\": \"https://localhost:9443/console/resources/connections/assets/images/logos/google.svg\",\n    \"isPrimary\": false,\n    \"isFederationHub\": false,\n    \"homeRealmIdentifier\": \"localhost\",\n    \"certificate\": {\n        \"certificates\": [\n            \"string\"\n        ],\n        \"jwksUri\": \"https://localhost:9444/oauth2/jwks\"\n    },\n    \"alias\": \"https://localhost:9444/oauth2/token\",\n    \"claims\": {\n        \"userIdClaim\": {\n            \"uri\": \"http://wso2.org/claims/username\"\n        },\n        \"roleClaim\": {\n            \"uri\": \"http://wso2.org/claims/username\"\n        },\n        \"mappings\": [\n            {\n                \"idpClaim\": \"country\",\n                \"localClaim\": {\n                    \"uri\": \"http://wso2.org/claims/username\"\n                }\n            }\n        ],\n        \"provisioningClaims\": [\n            {\n                \"claim\": {\n                    \"uri\": \"http://wso2.org/claims/username\"\n                },\n                \"defaultValue\": \"sathya\"\n            }\n        ]\n    },\n    \"roles\": {\n        \"mappings\": [\n            {\n                \"idpRole\": \"google-manager\",\n                \"localRole\": \"loginRole\"\n            }\n        ],\n        \"outboundProvisioningRoles\": [\n            \"loginRole\"\n        ]\n    },\n    \"federatedAuthenticators\": {\n        \"defaultAuthenticatorId\": \"VHdpdHRlckF1dGhlbnRpY2F0b3I\",\n        \"authenticators\": [\n            {\n                \"authenticatorId\": \"VHdpdHRlckF1dGhlbnRpY2F0b3I\",\n                \"isEnabled\": true,\n                \"isDefault\": false,\n                \"properties\": [\n                    {\n                        \"key\": \"somePropertyKey\",\n                        \"value\": \"somePropertyValue\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"provisioning\": {\n        \"jit\": {\n            \"isEnabled\": true,\n            \"scheme\": \"PROVISION_SILENTLY\",\n            \"userstore\": \"PRIMARY\",\n            \"associateLocalUser\": true\n        },\n        \"outboundConnectors\": {\n            \"defaultConnectorId\": \"U0NJTTI\",\n            \"connectors\": [\n                {\n                    \"connectorId\": \"U0NJTTI\",\n                    \"isEnabled\": true,\n                    \"isDefault\": false,\n                    \"blockingEnabled\": false,\n                    \"rulesEnabled\": false,\n                    \"properties\": [\n                        {\n                            \"key\": \"somePropertyKey\",\n                            \"value\": \"somePropertyValue\"\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}",
+									"raw": "{\n    \"name\": \"google\",\n    \"description\": \"IdP for Google Federation\",\n    \"image\": \"https://<WSO2_SERVER_URL>/console/resources/connections/assets/images/logos/google.svg\",\n    \"isPrimary\": false,\n    \"isFederationHub\": false,\n    \"homeRealmIdentifier\": \"localhost\",\n    \"certificate\": {\n        \"certificates\": [\n            \"string\"\n        ],\n        \"jwksUri\": \"https://localhost:9444/oauth2/jwks\"\n    },\n    \"alias\": \"https://localhost:9444/oauth2/token\",\n    \"claims\": {\n        \"userIdClaim\": {\n            \"uri\": \"http://wso2.org/claims/username\"\n        },\n        \"roleClaim\": {\n            \"uri\": \"http://wso2.org/claims/username\"\n        },\n        \"mappings\": [\n            {\n                \"idpClaim\": \"country\",\n                \"localClaim\": {\n                    \"uri\": \"http://wso2.org/claims/username\"\n                }\n            }\n        ],\n        \"provisioningClaims\": [\n            {\n                \"claim\": {\n                    \"uri\": \"http://wso2.org/claims/username\"\n                },\n                \"defaultValue\": \"sathya\"\n            }\n        ]\n    },\n    \"roles\": {\n        \"mappings\": [\n            {\n                \"idpRole\": \"google-manager\",\n                \"localRole\": \"loginRole\"\n            }\n        ],\n        \"outboundProvisioningRoles\": [\n            \"loginRole\"\n        ]\n    },\n    \"federatedAuthenticators\": {\n        \"defaultAuthenticatorId\": \"VHdpdHRlckF1dGhlbnRpY2F0b3I\",\n        \"authenticators\": [\n            {\n                \"authenticatorId\": \"VHdpdHRlckF1dGhlbnRpY2F0b3I\",\n                \"isEnabled\": true,\n                \"isDefault\": false,\n                \"properties\": [\n                    {\n                        \"key\": \"somePropertyKey\",\n                        \"value\": \"somePropertyValue\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"provisioning\": {\n        \"jit\": {\n            \"isEnabled\": true,\n            \"scheme\": \"PROVISION_SILENTLY\",\n            \"userstore\": \"PRIMARY\",\n            \"associateLocalUser\": true\n        },\n        \"outboundConnectors\": {\n            \"defaultConnectorId\": \"U0NJTTI\",\n            \"connectors\": [\n                {\n                    \"connectorId\": \"U0NJTTI\",\n                    \"isEnabled\": true,\n                    \"isDefault\": false,\n                    \"blockingEnabled\": false,\n                    \"rulesEnabled\": false,\n                    \"properties\": [\n                        {\n                            \"key\": \"somePropertyKey\",\n                            \"value\": \"somePropertyValue\"\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -10791,12 +10789,11 @@
 							}
 						],
 						"url": {
-							"raw": "https://localhost:9443/t/carbon.super/o/scim2/Users/{{user_id_01_subOrg}}",
+							"raw": "https://{{serverUrl}}/t/carbon.super/o/scim2/Users/{{user_id_01_subOrg}}",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{serverUrl}}"
 							],
-							"port": "9443",
 							"path": [
 								"t",
 								"carbon.super",
@@ -10839,12 +10836,11 @@
 							}
 						],
 						"url": {
-							"raw": "https://localhost:9443/scim2/Users/{{Main_User_ID1}}",
+							"raw": "https://{{serverUrl}}/scim2/Users/{{Main_User_ID1}}",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{serverUrl}}"
 							],
-							"port": "9443",
 							"path": [
 								"scim2",
 								"Users",
@@ -10893,12 +10889,11 @@
 							}
 						],
 						"url": {
-							"raw": "https://localhost:9443/api/server/v1/applications/{{Main_Application_ID}}",
+							"raw": "https://{{serverUrl}}/api/server/v1/applications/{{Main_Application_ID}}",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{serverUrl}}"
 							],
-							"port": "9443",
 							"path": [
 								"api",
 								"server",
@@ -10939,12 +10934,11 @@
 							}
 						],
 						"url": {
-							"raw": "https://localhost:9443/api/server/v1/organizations/{{Main_Organization_ID}}",
+							"raw": "https://{{serverUrl}}/api/server/v1/organizations/{{Main_Organization_ID}}",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{serverUrl}}"
 							],
-							"port": "9443",
 							"path": [
 								"api",
 								"server",
@@ -11141,7 +11135,7 @@
 		},
 		{
 			"key": "serverUrl",
-			"value": "localhost:9443",
+			"value": "<WSO2_SERVER_URL>",
 			"type": "string"
 		},
 		{
@@ -11150,7 +11144,7 @@
 		},
 		{
 			"key": "token_url",
-			"value": "https://localhost:9443/t/carbon.super/oauth2/token",
+			"value": "https://<WSO2_SERVER_URL>/t/carbon.super/oauth2/token",
 			"type": "string"
 		},
 		{
