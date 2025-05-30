@@ -1167,12 +1167,11 @@
 									}
 								},
 								"url": {
-									"raw": "https://<WSO2_SERVER_URL>/t/carbon.super/o/api/server/v1/identity-providers",
+									"raw": "https://{{serverUrl}}/t/carbon.super/o/api/server/v1/identity-providers",
 									"protocol": "https",
 									"host": [
-										"localhost"
+										"{{serverUrl}}"
 									],
-									"port": "9443",
 									"path": [
 										"t",
 										"carbon.super",
@@ -1367,12 +1366,11 @@
 									}
 								},
 								"url": {
-									"raw": "https://<WSO2_SERVER_URL>/t/carbon.super/o/api/server/v1/applications/{{shared_application_id}}",
+									"raw": "https://{{serverUrl}}/t/carbon.super/o/api/server/v1/applications/{{shared_application_id}}",
 									"protocol": "https",
 									"host": [
-										"localhost"
+										"{{serverUrl}}"
 									],
-									"port": "9443",
 									"path": [
 										"t",
 										"carbon.super",
@@ -10791,12 +10789,11 @@
 							}
 						],
 						"url": {
-							"raw": "https://<WSO2_SERVER_URL>/t/carbon.super/o/scim2/Users/{{user_id_01_subOrg}}",
+							"raw": "https://{{serverUrl}}/t/carbon.super/o/scim2/Users/{{user_id_01_subOrg}}",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{serverUrl}}"
 							],
-							"port": "9443",
 							"path": [
 								"t",
 								"carbon.super",
@@ -10839,12 +10836,11 @@
 							}
 						],
 						"url": {
-							"raw": "https://<WSO2_SERVER_URL>/scim2/Users/{{Main_User_ID1}}",
+							"raw": "https://{{serverUrl}}/scim2/Users/{{Main_User_ID1}}",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{serverUrl}}"
 							],
-							"port": "9443",
 							"path": [
 								"scim2",
 								"Users",
@@ -10893,12 +10889,11 @@
 							}
 						],
 						"url": {
-							"raw": "https://<WSO2_SERVER_URL>/api/server/v1/applications/{{Main_Application_ID}}",
+							"raw": "https://{{serverUrl}}/api/server/v1/applications/{{Main_Application_ID}}",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{serverUrl}}"
 							],
-							"port": "9443",
 							"path": [
 								"api",
 								"server",
@@ -10939,12 +10934,11 @@
 							}
 						],
 						"url": {
-							"raw": "https://<WSO2_SERVER_URL>/api/server/v1/organizations/{{Main_Organization_ID}}",
+							"raw": "https://{{serverUrl}}/api/server/v1/organizations/{{Main_Organization_ID}}",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{serverUrl}}"
 							],
-							"port": "9443",
 							"path": [
 								"api",
 								"server",

@@ -28937,12 +28937,11 @@
 							}
 						],
 						"url": {
-							"raw": "https://<WSO2_SERVER_URL>/api/server/v1/applications/{{application_saml_id}}",
+							"raw": "https://{{serverUrl}}/api/server/v1/applications/{{application_saml_id}}",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"{{serverUrl}}"
 							],
-							"port": "9443",
 							"path": [
 								"api",
 								"server",
