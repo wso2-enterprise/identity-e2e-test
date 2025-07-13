@@ -1,10 +1,7 @@
 {
 	"info": {
-		"_postman_id": "9dfeff61-99a3-45fb-82a2-49d8bb3d30dc",
 		"name": "Management API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38862978",
-		"_collection_link": "https://api000-4118.postman.co/workspace/API-Workspace~fb425487-c9ee-48d4-b643-e32394a24207/collection/38862978-9dfeff61-99a3-45fb-82a2-49d8bb3d30dc?action=share&source=collection_link&creator=38862978"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
