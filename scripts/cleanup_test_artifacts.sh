@@ -71,15 +71,24 @@ delete_at_path() {
     esac
 }
 
-# DELETE every SCIM role sharing a displayName. Unlike delete_by_name this
-# does not stop at the first match: two roles may share a name when their
-# audiences differ, and both collections leave one behind.
+# DELETE every SCIM role sharing a displayName. Unlike delete_by_name this does
+# not stop at the first match: two roles may share a name when their audiences
+# differ. collection01 leaves "loginRole" on the "New Application" audience and
+# collection02 leaves one on E2E-Test-Suite-Token, which this script preserves.
+#
+# Resolution goes through POST /scim2/v2/Roles/.search, the lookup the
+# collections themselves use, rather than a filter on GET. The
+# select(.displayName == $name) guard is load-bearing: if the server ever
+# ignores the filter and answers with the whole role list, an unguarded
+# .Resources[].id would delete every role in the tenant, "everyone" and the
+# admin roles included. Never take the ids on trust -- match the name here.
 delete_roles_by_name() {
     local name="$1" ids id code
-    ids=$(curl --silent --insecure --get "${BASE}/scim2/v2/Roles" \
-            --data-urlencode "filter=displayName eq ${name}" \
-            -H "Authorization: Basic ${AUTH}" -H 'Accept: application/json' \
-        | jq -r '.Resources[]?.id // empty' 2>/dev/null)
+    ids=$(curl --silent --insecure -X POST "${BASE}/scim2/v2/Roles/.search" \
+            -H "Authorization: Basic ${AUTH}" \
+            -H 'Content-Type: application/scim+json' \
+            --data-raw "{\"schemas\":[\"urn:ietf:params:scim:api:messages:2.0:SearchRequest\"],\"startIndex\":1,\"filter\":\"displayName eq ${name}\"}" \
+        | jq -r --arg name "$name" '.Resources[]? | select(.displayName == $name) | .id' 2>/dev/null)
 
     if [[ -z "$ids" ]]; then
         SKIPPED=$((SKIPPED + 1))
