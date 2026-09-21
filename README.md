@@ -6,6 +6,25 @@
 # Introduction
 This repository contains an automated API testing suite for WSO2 Identity Server and Asgardeo, aimed at improving test efficiency, reducing test time, and ensuring better API reliability, especially where UI-based testing is time-consuming.
 
+# Branches
+
+`master` is the shared base for this suite. Common documentation and the baseline collections live here; it is not tied to any single product release, and the collections on it are not validated against one.
+
+Version-specific work lives on a branch named after the WSO2 Identity Server release it targets. **Check out the branch matching the version you are testing before running anything.**
+
+| IS version | Branch  |
+|------------|---------|
+| 7.3.0      | `7.3.0` |
+| 7.2.0      | `7.2.0` |
+
+```
+git checkout 7.3.0
+```
+
+Each version branch is kept in step with its release's API surface. Running a collection against a different version may produce failures that reflect API differences between releases rather than real defects, so match the branch to your server before reporting one.
+
+When contributing: raise changes that apply to every release against `master`, to be merged down into the version branches; raise changes specific to one release directly against that release's branch.
+
 # Scope
 This test suite focuses on comprehensive backend-level API validation for WSO2 Identity Server and Asgardeo. The primary goal is to ensure correctness, security, and stability of all exposed API endpoints critical to Identity and Access Management.
 
